@@ -29,6 +29,9 @@ coverage.json
 build
 artifacts
 cache
+.coverage_artifacts/
+.coverage_contracts/
+.coverage_cache/
 
 # Dependency directories
 node_modules
