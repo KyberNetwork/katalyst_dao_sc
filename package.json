@@ -7,6 +7,17 @@
     "type": "git",
     "url": "https://github.com/KyberNetwork/kyber_dao_sc.git"
   },
+  "scripts": {
+    "test": "./test.sh",
+    "t": "./test.sh",
+    "compile": "./compile.sh",
+    "c": "./compile.sh",
+    "coverage": "./coverage.sh",
+    "lint": "yarn solhint 'contracts/*.sol' && yarn prettier -c './**/*.js'"
+  },
+  "bugs": {
+    "url": "https://github.com/KyberNetwork/kyber_dao_sc/issues"
+  },
   "author": "Kyber SC Team",
   "license": "MIT",
   "dependencies": {
