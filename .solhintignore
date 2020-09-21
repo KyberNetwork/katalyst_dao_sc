@@ -1,3 +1,10 @@
 ## utils
 contracts/utils/*.sol
 contracts/mock/*.sol
+
+# production contracts
+contracts/IKyberFeeHandler.sol
+contracts/IKyberStaking.sol
+contracts/KyberDao.sol
+contracts/KyberFeeHandler.sol
+contracts/KyberStaking.sol

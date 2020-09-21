@@ -15,9 +15,8 @@ jobs:
 install:
   - yarn install
 
-# temporarily disabled solhint as some parts are failing
-# before_script:
-#   - yarn lint
+before_script:
+  - yarn lint
 
 script:
   - yarn c
