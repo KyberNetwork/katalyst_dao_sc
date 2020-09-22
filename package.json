@@ -13,7 +13,7 @@
     "compile": "./compile.sh",
     "c": "./compile.sh",
     "coverage": "./coverage.sh",
-    "lint": "yarn solhint 'contracts/*.sol' && yarn prettier -c './**/*.js'"
+    "lint": "yarn solhint 'contracts/**/*.sol' && yarn prettier -c 'test/**/*.js'"
   },
   "bugs": {
     "url": "https://github.com/KyberNetwork/kyber_dao_sc/issues"
@@ -25,7 +25,6 @@
     "mathjs": "4.4.2",
     "solc": "0.6.6",
     "solhint": "3.0.0-rc.8",
-    "truffle-assertions": "^0.9.2",
     "web3": "1.2.4",
     "yargs": "^16.0.3"
   },

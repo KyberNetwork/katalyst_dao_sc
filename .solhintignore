@@ -1,10 +1,37 @@
 ## utils
-contracts/utils/*.sol
-contracts/mock/*.sol
+contracts/utils/zeppelin/*.sol
+contracts/utils/Utils5.sol
 
-# production contracts
+## mock contracts
+contracts/mock/MaliciousFeeHandler.sol
+contracts/mock/MaliciousKyberDao.sol
+contracts/mock/MockChainLinkSanityRate.sol
+contracts/mock/MockContractCallBurnKNC.sol
+contracts/mock/MockEmergencyFeeHandler.sol
+contracts/mock/MockKyberDao.sol
+contracts/mock/MockKyberDaoMoreGetters.sol
+contracts/mock/MockKyberDaoTestHandleWithdrawal.sol
+contracts/mock/MockKyberDaoWithdrawFailed.sol
+contracts/mock/MockMaliciousKyberDao.sol
+contracts/mock/MockMaliciousKyberDaoReentrancy.sol
+contracts/mock/MockReserve.sol
+contracts/mock/MockStakerClaimRewardReentrancy.sol
+contracts/mock/NoPayableFallback.sol
+contracts/mock/ReentrancyFeeClaimer.sol
+contracts/mock/Token.sol
+contracts/mock/TokenNotReturn.sol
+contracts/mock/KyberFeeHandlerWrapper.sol
+contracts/mock/KyberTokenFeeHandler.sol
+contracts/mock/KyberMatchingEngine.sol
+contracts/mock/KyberNetwork.sol
+contracts/mock/KyberNetworkProxy.sol
+contracts/mock/KyberStorage.sol
+contracts/mock/SimpleKyberProxy.sol
+
+## production contracts
 contracts/IKyberFeeHandler.sol
 contracts/IKyberStaking.sol
 contracts/KyberDao.sol
 contracts/KyberFeeHandler.sol
 contracts/KyberStaking.sol
+contracts/emergency/EmergencyFeeHandler.sol
