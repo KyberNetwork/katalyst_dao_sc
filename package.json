@@ -26,6 +26,7 @@
     "solc": "0.6.6",
     "solhint": "3.0.0-rc.8",
     "web3": "1.2.4",
+    "winston": "^3.3.3",
     "yargs": "^16.0.3"
   },
   "devDependencies": {
