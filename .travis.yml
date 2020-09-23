@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - 10
+
+before_install:
+  - npm i -g npm
+  - npm i -g mocha-only-detector
+  - find test/ -name "*.js" -print0 | xargs -0 mocha-only-detector
+
+jobs:
+  include:
+    - env:
+        - TEST_PART: fullRegression
+
+install:
+  - yarn install
+
+before_script:
+  - yarn lint
+
+script:
+  - yarn c
+  - .travis/test-part.sh
+  - .travis/report.sh
