@@ -6,7 +6,7 @@ const {
   getEpochNumber,
   CAMPAIGN_TYPE_GENERAL,
   CAMPAIGN_TYPE_NETWORK_FEE,
-  CAMPAIGN_TYPE_FEE_BRR
+  CAMPAIGN_TYPE_FEE_BRR,
 } = require('./daoActionsGenerator.js');
 const {assert} = require('chai');
 
@@ -25,7 +25,7 @@ module.exports = {
   numberVotes,
   stakerVotedOption,
   networkFeeCampaigns,
-  brrCampaigns
+  brrCampaigns,
 };
 
 let startTime;
@@ -67,7 +67,7 @@ module.exports.submitCampaign = function (
 
   campaignVoteData = {
     totalVotes: new BN(0),
-    votePerOption
+    votePerOption,
   };
 
   campaignData[campaignId] = {
@@ -80,7 +80,7 @@ module.exports.submitCampaign = function (
     tInPrecision,
     options: options,
     totalKNCSupply: totalKNCSupply,
-    campaignVoteData
+    campaignVoteData,
   };
 };
 
@@ -151,7 +151,7 @@ module.exports.getCampaignWinningOptionAndValue = function (campaignID) {
     totalSupply,
     campaignType: campaign.campaignType,
     winOption: new BN(0),
-    winValue: new BN(0)
+    winValue: new BN(0),
   };
 
   let winOption = new BN(0);
@@ -187,7 +187,7 @@ module.exports.getCampaignWinningOptionAndValue = function (campaignID) {
   return result;
 };
 
-function addValueToDictionay (dic, key, value) {
+function addValueToDictionay(dic, key, value) {
   if (key in dic) {
     dic[key] = dic[key].add(value);
   } else {
@@ -195,7 +195,7 @@ function addValueToDictionay (dic, key, value) {
   }
 }
 
-function subValueToDictionay (dic, key, value) {
+function subValueToDictionay(dic, key, value) {
   assert(key in dic, `not exist key=${key} dic=${dic}`);
   dic[key] = dic[key].sub(value);
 }

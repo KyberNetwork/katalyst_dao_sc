@@ -15,7 +15,7 @@ const {
   VOTE,
   CAMPAIGN_TYPE_GENERAL,
   CAMPAIGN_TYPE_NETWORK_FEE,
-  CAMPAIGN_TYPE_FEE_BRR
+  CAMPAIGN_TYPE_FEE_BRR,
 } = require('./fuzzerFiles/daoFuzzer/daoActionsGenerator.js');
 const winston = require('winston');
 
@@ -56,7 +56,7 @@ let score = {
   cancelCampaign: {success: 0, fail: 0},
   vote: {success: 0, fail: 0},
   noAction: {success: 0, fail: 0},
-  successCampaign: {success: 0, fail: 0}
+  successCampaign: {success: 0, fail: 0},
 };
 
 const logger = winston.createLogger({
@@ -66,9 +66,9 @@ const logger = winston.createLogger({
     new winston.transports.Console({level: 'info'}),
     new winston.transports.File({
       filename: 'fuzz_dao.log',
-      level: 'debug'
-    })
-  ]
+      level: 'debug',
+    }),
+  ],
 });
 
 contract('KyberDAO fuzz', function (accounts) {
@@ -123,7 +123,7 @@ contract('KyberDAO fuzz', function (accounts) {
     let loop;
     for (loop = 0; loop < NUM_RUNS; loop++) {
       if (loop % progressIterations == 0) {
-        process.stdout.write(`${(loop / NUM_RUNS * 100).toFixed(0.1)}% complete\n`);
+        process.stdout.write(`${((loop / NUM_RUNS) * 100).toFixed(0.1)}% complete\n`);
       }
       let currentBlockTime = (await Helper.getCurrentBlockTime()) + 10;
       let nextEpoch = DaoGenerator.getEpochNumber(epochPeriod, startTime, currentBlockTime);
@@ -174,7 +174,7 @@ contract('KyberDAO fuzz', function (accounts) {
     printResult(loop);
   });
 
-  function printResult (loop) {
+  function printResult(loop) {
     logger.info(`RESULTS loop=%d no-op=%d`, loop, score.noAction.success);
     logger.info(`Deposit operation %j`, score.deposit);
     logger.info(`Delegate operation %j`, score.delegate);
@@ -185,7 +185,7 @@ contract('KyberDAO fuzz', function (accounts) {
     logger.info(`Campaign has winning option %j`, score.successCampaign);
   }
 
-  async function deposit (currentBlockTime, epoch) {
+  async function deposit(currentBlockTime, epoch) {
     result = await StakeGenerator.genDeposit(kncToken, stakers);
     result.delegatedAddress = await stakingContract.getLatestRepresentative(result.staker);
     logger.debug(`Deposit: %j`, result);
@@ -202,7 +202,7 @@ contract('KyberDAO fuzz', function (accounts) {
     score.deposit = incrementScoreCount(result.isValid, score.deposit);
   }
 
-  async function delegate (currentBlockTime, epoch) {
+  async function delegate(currentBlockTime, epoch) {
     result = await StakeGenerator.genDelegate(stakers);
     logger.debug(`Delegate: %j`, result);
     await Helper.setNextBlockTimestamp(currentBlockTime);
@@ -219,7 +219,7 @@ contract('KyberDAO fuzz', function (accounts) {
     score.delegate = incrementScoreCount(result.dAddress != zeroAddress, score.delegate);
   }
 
-  async function withdraw (currentBlockTime, epoch) {
+  async function withdraw(currentBlockTime, epoch) {
     result = await StakeGenerator.genWithdraw(stakingContract, stakers);
     result.delegatedAddress = await stakingContract.getLatestRepresentative(result.staker);
     logger.debug(`Withdrawal: %j`, result);
@@ -234,7 +234,7 @@ contract('KyberDAO fuzz', function (accounts) {
         logger.debug('after stake for current epoch is smaller than before stake, handle withdrawal %j', {
           staker: result.staker,
           afterState: afterState,
-          beforeStake: beforeStake
+          beforeStake: beforeStake,
         });
         representative = await stakingContract.getRepresentative(result.staker, epoch);
         DaoSimulator.handlewithdraw(representative, beforeStake.sub(afterState), epoch, currentBlockTime);
@@ -247,7 +247,7 @@ contract('KyberDAO fuzz', function (accounts) {
     score.withdraw = incrementScoreCount(result.isValid, score.withdraw);
   }
 
-  async function submitNewCampaign (currentBlockTime, epoch) {
+  async function submitNewCampaign(currentBlockTime, epoch) {
     let result = await DaoGenerator.genSubmitNewCampaign(daoContract, epochPeriod, startTime, currentBlockTime, epoch);
     if (result == undefined) return;
     await Helper.setNextBlockTimestamp(currentBlockTime);
@@ -294,7 +294,7 @@ contract('KyberDAO fuzz', function (accounts) {
     score.submitNewCampaign = incrementScoreCount(result.isValid, score.submitNewCampaign);
   }
 
-  async function cancelCampaign (currentBlockTime, epoch) {
+  async function cancelCampaign(currentBlockTime, epoch) {
     result = await DaoGenerator.genCancelCampaign(daoContract, currentBlockTime, epoch);
     if (result == undefined) {
       logger.debug(`there is no campain in epoch %d and epoch %d to cancel`, epoch, epoch.add(new BN(1)));
@@ -311,7 +311,7 @@ contract('KyberDAO fuzz', function (accounts) {
     score.cancelCampaign = incrementScoreCount(result.isValid, score.cancelCampaign);
   }
 
-  async function vote (currentBlockTime, epoch) {
+  async function vote(currentBlockTime, epoch) {
     result = await DaoGenerator.genVote(daoContract, currentBlockTime, epoch, stakers);
     if (result == undefined) {
       logger.debug(`there is no campain in epoch %d to vote generate new campagin`, epoch);
@@ -336,7 +336,7 @@ contract('KyberDAO fuzz', function (accounts) {
     score.vote = incrementScoreCount(result.isValid, score.vote);
   }
 
-  async function checkWinningCampaign (daoContract, currentBlockTime, epoch) {
+  async function checkWinningCampaign(daoContract, currentBlockTime, epoch) {
     let campaignIDs = await daoContract.getListCampaignIDs(epoch);
     if (campaignIDs.length == 0) {
       logger.verbose('No campaign to checkWinningCampaign epoch=%d', epoch);
@@ -393,7 +393,7 @@ contract('KyberDAO fuzz', function (accounts) {
     }
   }
 
-  async function checkAllStakerReward (daoContract, stakingContract, stakers, epoch, isCurrentOrPastEpoch) {
+  async function checkAllStakerReward(daoContract, stakingContract, stakers, epoch, isCurrentOrPastEpoch) {
     let totalPoint = new BN(0);
     let actualTotalPoint = await daoContract.getTotalEpochPoints(epoch);
     let simulatedTotalPoint = DaoSimulator.getTotalEpochPoints(epoch);
@@ -422,17 +422,14 @@ contract('KyberDAO fuzz', function (accounts) {
         Helper.assertEqual(rewardPercentage, zeroBN, 'rewardPercentage should be zero');
         continue;
       }
-      let expectedRewardPercentage = numVotes
-        .mul(totalStake)
-        .mul(precisionUnits)
-        .div(new BN(actualTotalPoint));
+      let expectedRewardPercentage = numVotes.mul(totalStake).mul(precisionUnits).div(new BN(actualTotalPoint));
       Helper.assertEqual(rewardPercentage, expectedRewardPercentage, 'unexpected reward percentage');
     }
     Helper.assertEqual(totalPoint, simulatedTotalPoint, 'total point from each staker should match');
   }
 });
 
-async function assertEqualEpochVoteData (daoContract, epoch) {
+async function assertEqualEpochVoteData(daoContract, epoch) {
   let campaignIDs = await daoContract.getListCampaignIDs(epoch);
   for (const campaignID of campaignIDs) {
     await assertEqualCampaignVoteData(daoContract, campaignID);
@@ -442,7 +439,7 @@ async function assertEqualEpochVoteData (daoContract, epoch) {
   Helper.assertEqual(totalEpochPoint, DaoSimulator.totalEpochPoints[epoch], 'unmatch total epoch point');
 }
 
-async function assertEqualCampaignVoteData (daoContract, campaignID) {
+async function assertEqualCampaignVoteData(daoContract, campaignID) {
   let campaignVoteData = await daoContract.getCampaignVoteCountData(campaignID);
   assert(campaignID in DaoSimulator.campaignData, 'campaign ID not exist in simulator data');
   let simulateVoteData = DaoSimulator.campaignData[campaignID].campaignVoteData;
@@ -451,7 +448,7 @@ async function assertEqualCampaignVoteData (daoContract, campaignID) {
   Helper.assertEqualArray(campaignVoteData.voteCounts, simulateVoteData.votePerOption, 'unexpected votePerOption');
 }
 
-function incrementScoreCount (isValid, score) {
+function incrementScoreCount(isValid, score) {
   if (isValid) {
     score.success += 1;
   } else {

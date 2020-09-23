@@ -25,10 +25,10 @@ module.exports = {
   GET_REWARD,
   CAMPAIGN_TYPE_GENERAL,
   CAMPAIGN_TYPE_NETWORK_FEE,
-  CAMPAIGN_TYPE_FEE_BRR
+  CAMPAIGN_TYPE_FEE_BRR,
 };
 
-module.exports.genNextOp = function genNextOp (loop, numRuns) {
+module.exports.genNextOp = function genNextOp(loop, numRuns) {
   let rand = genRandomSeed(BASE);
   let depositWeight;
   let withdrawWeight;
@@ -88,7 +88,7 @@ module.exports.genSubmitNewCampaign = async (daoContract, epochPeriod, startTime
     tInPrecision: precision,
     options: [new BN(1), new BN(2)],
     isValid: true,
-    msg: 'create general campaign at epoch ' + startEpoch
+    msg: 'create general campaign at epoch ' + startEpoch,
   };
   // test create campaign at the past
   if (startTimestamp.lt(new BN(currentBlockTime))) {
@@ -214,12 +214,9 @@ module.exports.genSubmitNewCampaign = async (daoContract, epochPeriod, startTime
 };
 
 module.exports.getEpochNumber = getEpochNumber;
-function getEpochNumber (epochPeriod, startTime, timestamp) {
+function getEpochNumber(epochPeriod, startTime, timestamp) {
   if (new BN(timestamp).lt(new BN(startTime))) return new BN(0);
-  return new BN(timestamp)
-    .sub(new BN(startTime))
-    .div(new BN(epochPeriod))
-    .add(new BN(1));
+  return new BN(timestamp).sub(new BN(startTime)).div(new BN(epochPeriod)).add(new BN(1));
 }
 
 // random select a campaignID from current epoch or next epoch
@@ -240,17 +237,17 @@ module.exports.genCancelCampaign = async (daoContract, currentBlockTime, epoch) 
       blockTime: currentBlockTime,
       isValid: false,
       msg: "cancelCampaign: campaignID doesn't exist",
-      campaignID
+      campaignID,
     };
   }
 
   let campaignDetails = await daoContract.getCampaignDetails(campaignID);
-  if(campaignDetails.startTimestamp.eq(new BN(0))) {
+  if (campaignDetails.startTimestamp.eq(new BN(0))) {
     return {
       blockTime: currentBlockTime,
       isValid: false,
       msg: "cancelCampaign: campaignID doesn't exist",
-      campaignID
+      campaignID,
     };
   }
   if (campaignDetails.startTimestamp <= currentBlockTime) {
@@ -258,7 +255,7 @@ module.exports.genCancelCampaign = async (daoContract, currentBlockTime, epoch) 
       blockTime: currentBlockTime,
       isValid: false,
       msg: 'cancelCampaign: campaign already started',
-      campaignID
+      campaignID,
     };
   }
 
@@ -266,7 +263,7 @@ module.exports.genCancelCampaign = async (daoContract, currentBlockTime, epoch) 
     blockTime: currentBlockTime,
     isValid: true,
     msg: `cancel Campaign ${campaignID} in epoch ${epoch}`,
-    campaignID
+    campaignID,
   };
 };
 
@@ -282,7 +279,7 @@ module.exports.genVote = async (daoContract, currentBlockTime, epoch, stakers) =
         campaignID: new BN(numCampaign).add(new BN(2)),
         option: new BN(1),
         isValid: false,
-        msg: "vote: campaign doesn't exist"
+        msg: "vote: campaign doesn't exist",
       };
     }
     // returns undefined so simulater will genVote instead
@@ -297,7 +294,7 @@ module.exports.genVote = async (daoContract, currentBlockTime, epoch, stakers) =
     campaignID,
     option: new BN(option),
     isValid: true,
-    msg: ''
+    msg: '',
   };
   if (campaignDetails.startTimestamp > currentBlockTime) {
     result.isValid = false;

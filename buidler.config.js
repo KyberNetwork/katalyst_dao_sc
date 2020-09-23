@@ -130,6 +130,6 @@ module.exports = {
   },
 
   mocha: {
-    enableTimeouts: false,
+    timeout: 150000
   },
 };
