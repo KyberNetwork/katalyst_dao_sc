@@ -21,6 +21,7 @@
   "author": "Kyber SC Team",
   "license": "MIT",
   "dependencies": {
+    "@kyber.network/utils-sc": "^2.0.0",
     "dotenv": "8.2.0",
     "mathjs": "4.4.2",
     "solc": "0.6.6",
