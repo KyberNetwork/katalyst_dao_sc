@@ -1,6 +1,6 @@
 pragma solidity 0.6.6;
 
-import "./IKyberFeeHandler.sol";
+import "../IKyberFeeHandler.sol";
 
 interface IFeeHandler is IKyberFeeHandler {
     function hasClaimedReward(address, uint256) external view returns (bool);

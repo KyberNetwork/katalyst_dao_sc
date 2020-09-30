@@ -1,6 +1,6 @@
 pragma solidity 0.6.6;
 
-import "./IKyberDao.sol";
+import "../IKyberDao.sol";
 import "./IMultipleEpochRewardsClaimer.sol";
 import "@kyber.network/utils-sc/Withdrawable.sol";
 
