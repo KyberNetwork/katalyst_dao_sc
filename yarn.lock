@@ -154,10 +154,10 @@
     "@ethersproject/rlp" "^5.0.3"
     "@ethersproject/signing-key" "^5.0.4"
 
-"@kyber.network/utils-sc@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@kyber.network/utils-sc/-/utils-sc-2.0.0.tgz#3ffd2f8df78518b5accaac44b9b6d20401066eeb"
-  integrity sha512-7X+CxttePkdLW66Wnl/6kYWAoOj2hZW1zebV0F9S3zIMMI8DIWkRZbKQwlo/+s0BVb4sTjfhmTCSoEulhtS/fw==
+"@kyber.network/utils-sc@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@kyber.network/utils-sc/-/utils-sc-2.1.1.tgz#9e1a103c2c3b63970572a1c839986084c67f5cb6"
+  integrity sha512-l7P+G9Vf6k5h4ioqe1TrIz0pOVv54qb6ZvmCIKEz9G4WfG2DxE9J2KpTesLGqoKib/M/2eQKls3B2z84KkUfpw==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"

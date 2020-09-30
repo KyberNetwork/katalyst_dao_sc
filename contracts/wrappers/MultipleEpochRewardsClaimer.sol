@@ -2,7 +2,7 @@ pragma solidity 0.6.6;
 
 import "../IKyberDao.sol";
 import "./IMultipleEpochRewardsClaimer.sol";
-import "@kyber.network/utils-sc/Withdrawable.sol";
+import "@kyber.network/utils-sc/contracts/Withdrawable.sol";
 
 
 contract MultipleEpochRewardsClaimer is IMultipleEpochRewardsClaimer, Withdrawable {
