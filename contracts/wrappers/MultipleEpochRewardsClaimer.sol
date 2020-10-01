@@ -18,9 +18,6 @@ contract MultipleEpochRewardsClaimer is IMultipleEpochRewardsClaimer, Withdrawab
         IFeeHandler feeHandler,
         uint256[] calldata unclaimedEpochs
     ) external override {
-        // full array size is expected to be of reasonable length
-        // for the next 1-2 years
-        // we thus start iterating from epoch 0
         for (uint256 i = 0; i < unclaimedEpochs.length; i++) {
             feeHandler.claimStakerReward(msg.sender, unclaimedEpochs[i]);
         }
@@ -36,6 +33,9 @@ contract MultipleEpochRewardsClaimer is IMultipleEpochRewardsClaimer, Withdrawab
         uint256[] memory tempArray = new uint256[](currentEpoch);
         uint256 i;
         uint256 j;
+        // full array size is expected to be of reasonable length
+        // for the next 1-2 years
+        // we thus start iterating from epoch 0
         for (i = 0; i < currentEpoch; i++) {
             if (
                 !feeHandler.hasClaimedReward(staker, i) &&
