@@ -50,3 +50,4 @@ report
 
 # Environment
 .env
+node_modules
