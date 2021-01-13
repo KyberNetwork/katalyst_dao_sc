@@ -27,7 +27,7 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
     /// @return tokenToEthReserveIds Decoded reserve IDs
     /// @return tokenToEthAddresses Reserve addresses corresponding to reserve IDs
     /// @return tokenToEthSplits Decoded splits
-    function parseTokenToEthHint(IERC20 tokenSrc, bytes memory hint)
+    function parseTokenToEthHint(IERC20Ext tokenSrc, bytes memory hint)
         public
         view
         override
@@ -70,7 +70,7 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
     /// @return ethToTokenReserveIds Decoded reserve IDs
     /// @return ethToTokenAddresses Reserve addresses corresponding to reserve IDs
     /// @return ethToTokenSplits Decoded splits
-    function parseEthToTokenHint(IERC20 tokenDest, bytes memory hint)
+    function parseEthToTokenHint(IERC20Ext tokenDest, bytes memory hint)
         public
         view
         override
@@ -118,7 +118,7 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
     /// @return ethToTokenReserveIds Decoded reserve IDs
     /// @return ethToTokenAddresses Reserve addresses corresponding to reserve IDs
     /// @return ethToTokenSplits Decoded splits
-    function parseTokenToTokenHint(IERC20 tokenSrc, IERC20 tokenDest, bytes memory hint)
+    function parseTokenToTokenHint(IERC20Ext tokenSrc, IERC20Ext tokenDest, bytes memory hint)
         public
         view
         override
@@ -160,7 +160,7 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
     /// @param tokenToEthSplits token -> eth reserve splits
     /// @return hint The ABI encoded hint
     function buildTokenToEthHint(
-        IERC20 tokenSrc,
+        IERC20Ext tokenSrc,
         TradeType tokenToEthType,
         bytes32[] memory tokenToEthReserveIds,
         uint256[] memory tokenToEthSplits
@@ -202,7 +202,7 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
     /// @param ethToTokenSplits eth -> token reserve splits
     /// @return hint The ABI encoded hint
     function buildEthToTokenHint(
-        IERC20 tokenDest,
+        IERC20Ext tokenDest,
         TradeType ethToTokenType,
         bytes32[] memory ethToTokenReserveIds,
         uint256[] memory ethToTokenSplits
@@ -248,11 +248,11 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
     /// @param ethToTokenSplits eth -> token reserve splits
     /// @return hint The ABI encoded hint
     function buildTokenToTokenHint(
-        IERC20 tokenSrc,
+        IERC20Ext tokenSrc,
         TradeType tokenToEthType,
         bytes32[] memory tokenToEthReserveIds,
         uint256[] memory tokenToEthSplits,
-        IERC20 tokenDest,
+        IERC20Ext tokenDest,
         TradeType ethToTokenType,
         bytes32[] memory ethToTokenReserveIds,
         uint256[] memory ethToTokenSplits
@@ -326,12 +326,12 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
     /// @param reserveIds Reserve IDs
     /// @param isTokenToEth Flag to indicate token -> eth or eth -> token
     function checkTokenListedForReserve(
-        IERC20 token,
+        IERC20Ext token,
         bytes32[] memory reserveIds,
         bool isTokenToEth
     ) internal view {
-        IERC20 src = (isTokenToEth) ? token : ETH_TOKEN_ADDRESS;
-        IERC20 dest = (isTokenToEth) ? ETH_TOKEN_ADDRESS : token;
+        IERC20Ext src = (isTokenToEth) ? token : ETH_TOKEN_ADDRESS;
+        IERC20Ext dest = (isTokenToEth) ? ETH_TOKEN_ADDRESS : token;
 
         if (!areAllReservesListed(reserveIds, src, dest))
             throwHintError(HintErrors.TokenListedError);
@@ -449,7 +449,7 @@ abstract contract KyberHintHandler is IKyberHint, Utils5 {
 
     function areAllReservesListed(
         bytes32[] memory reserveIds,
-        IERC20 src,
-        IERC20 dest
+        IERC20Ext src,
+        IERC20Ext dest
     ) internal virtual view returns (bool);
 }

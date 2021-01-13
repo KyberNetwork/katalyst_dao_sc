@@ -24,7 +24,7 @@ PRIVATE_KEY=0x****************************************************************
 INFURA_API_KEY=********************************
 ```
 
-## Testing
+## Testing with Hardhat
 1. If contracts have not been compiled, run `yarn compile`. This step can be skipped subsequently.
 2. Run `yarn test`
 3. Use `./tst.sh -f` for running a specific test file.
@@ -34,7 +34,7 @@ INFURA_API_KEY=********************************
 - `./tst.sh -f ./test/kyberDao.js` (Test only kyberDao.js)
 
 ### Example
-`yarn buidler test --no-compile ./test/kyberDao.js`
+`yarn hardhat test --no-compile ./test/kyberDao.js`
 
 ## Coverage
 `yarn coverage` (Runs coverage for all applicable files)

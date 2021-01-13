@@ -1,9 +1,9 @@
 pragma solidity 0.6.6;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../IKyberFeeHandler.sol";
 import "../utils/PermissionGroups3.sol";
-import "../utils/zeppelin/ReentrancyGuard.sol";
-import "../utils/zeppelin/SafeMath.sol";
 import "../utils/Utils5.sol";
 
 /**
@@ -35,7 +35,7 @@ contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, Reentr
     event HandleFeeFailed(address[] rebateWallets, uint256[] rebateBpsPerWallet, uint256 feeBRRWei);
 
     event HandleFee(
-        IERC20 indexed token,
+        IERC20Ext indexed token,
         address indexed platformWallet,
         uint256 platformFeeWei,
         address[] rebateWallets,
@@ -44,7 +44,7 @@ contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, Reentr
     );
 
     event FeeDistribution(
-        IERC20 indexed token,
+        IERC20Ext indexed token,
         address indexed platformWallet,
         uint256 platformFeeWei,
         uint256 rewardWei,
@@ -84,7 +84,7 @@ contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, Reentr
     /// @param platformFee Fee amount in wei the platfrom wallet is entitled to.
     /// @param networkFee Fee amount (in wei) to be allocated for BRR
     function handleFees(
-        IERC20 token,
+        IERC20Ext token,
         address[] calldata rebateWallets,
         uint256[] calldata rebateBpsPerWallet,
         address platformWallet,

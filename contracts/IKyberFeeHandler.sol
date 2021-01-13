@@ -1,16 +1,16 @@
 pragma solidity 0.6.6;
 
-import "./IERC20.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
 
 
 interface IKyberFeeHandler {
-    event RewardPaid(address indexed staker, uint256 indexed epoch, IERC20 indexed token, uint256 amount);
-    event RebatePaid(address indexed rebateWallet, IERC20 indexed token, uint256 amount);
-    event PlatformFeePaid(address indexed platformWallet, IERC20 indexed token, uint256 amount);
-    event KncBurned(uint256 kncTWei, IERC20 indexed token, uint256 amount);
+    event RewardPaid(address indexed staker, uint256 indexed epoch, IERC20Ext indexed token, uint256 amount);
+    event RebatePaid(address indexed rebateWallet, IERC20Ext indexed token, uint256 amount);
+    event PlatformFeePaid(address indexed platformWallet, IERC20Ext indexed token, uint256 amount);
+    event KncBurned(uint256 kncTWei, IERC20Ext indexed token, uint256 amount);
 
     function handleFees(
-        IERC20 token,
+        IERC20Ext token,
         address[] calldata eligibleWallets,
         uint256[] calldata rebatePercentages,
         address platformWallet,

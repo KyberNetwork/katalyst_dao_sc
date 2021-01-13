@@ -1,28 +1,43 @@
 'use strict';
 const fs = require('fs');
-const util = require('util');
+const { resolve } = require('path');
+const { promisify } = require('util');
 const got = require('got');
 const yargs = require('yargs');
+const { contract } = require('hardhat');
 
-let path = 'artifacts';
+let mainPath = 'artifacts/contracts';
 
-const readdir = util.promisify(fs.readdir);
+const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
 
-let argv = yargs.default('branch', 'master').alias('b', 'branch').argv;
+let argv = yargs.default('branch', 'Katalyst').alias('b', 'branch').argv;
 
 async function generateCodeSizeReport() {
   let result = {};
-  let fileNames = await readdir(path);
+  let fileNames = await getFiles(mainPath);
   for (let i = 0; i < fileNames.length; i++) {
     let fileName = fileNames[i];
-    let rawData = fs.readFileSync(path + '/' + fileName);
+    let rawData = fs.readFileSync(fileName);
     let contractData = JSON.parse(rawData);
-    let codeSize = contractData.deployedBytecode.length / 2 - 1;
-    if (codeSize > 0) {
-      result[fileName] = codeSize;
+    if (contractData.deployedBytecode !== undefined) {
+      let codeSize = contractData.deployedBytecode.length / 2 - 1;
+      if (codeSize > 0) {
+        let concatFileName = fileName.substring(fileName.lastIndexOf("contracts/") + 10);
+        result[concatFileName] = codeSize;
+      }
     }
   }
   return result;
+}
+
+async function getFiles(dir) {
+  const subdirs = await readdir(dir);
+  const files = await Promise.all(subdirs.map(async (subdir) => {
+    const res = resolve(dir, subdir);
+    return (await stat(res)).isDirectory() ? getFiles(res) : res;
+  }));
+  return files.reduce((a, f) => a.concat(f), []);
 }
 
 async function writeReport(report) {
@@ -59,7 +74,7 @@ async function compareContractSize() {
   let remoteReport = await getRemoteReport();
   if (!remoteReport) {
     console.log(`Could not get report for ${argv.branch}`);
-    console.log('Current contract size report');
+    console.log("Current contract size report");
     console.table(contractSizeReport);
     return false;
   }

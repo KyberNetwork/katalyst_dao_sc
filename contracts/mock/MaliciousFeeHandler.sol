@@ -8,7 +8,7 @@ contract MaliciousFeeHandler is KyberFeeHandler {
         address daoSetter,
         IKyberProxy _kyberNetworkProxy,
         address _kyberNetwork,
-        IERC20 _knc,
+        IERC20Ext _knc,
         uint256 _burnBlockInterval,
         address _daoOperator
     )

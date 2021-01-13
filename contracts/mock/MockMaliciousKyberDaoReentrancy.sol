@@ -7,7 +7,7 @@ import "../KyberStaking.sol";
 /// @notice Mock Malicious KyberDao tries to re-enter withdraw function in Staking
 contract MockMaliciousKyberDaoReentrancy is EpochUtils {
     KyberStaking public staking;
-    IERC20 public knc;
+    IERC20Ext public knc;
 
     uint256 totalDeposit = 0;
 
@@ -15,7 +15,7 @@ contract MockMaliciousKyberDaoReentrancy is EpochUtils {
         uint256 _epochPeriod,
         uint256 _startTimestamp,
         KyberStaking _staking,
-        IERC20 _knc
+        IERC20Ext _knc
     ) public {
         epochPeriodInSeconds = _epochPeriod;
         firstEpochStartTimestamp = _startTimestamp;

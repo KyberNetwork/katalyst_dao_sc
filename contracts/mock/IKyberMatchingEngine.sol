@@ -15,8 +15,8 @@ interface IKyberMatchingEngine {
     function getNegligibleRateDiffBps() external view returns (uint256);
 
     function getTradingReserves(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         bool isTokenToToken,
         bytes calldata hint
     )
@@ -29,8 +29,8 @@ interface IKyberMatchingEngine {
         );
 
     function doMatch(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256[] calldata srcAmounts,
         uint256[] calldata feesAccountedDestBps,
         uint256[] calldata rates

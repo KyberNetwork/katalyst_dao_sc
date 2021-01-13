@@ -1,6 +1,6 @@
 pragma solidity 0.6.6;
 
-import "../IERC20.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
 
 
 /**
@@ -10,7 +10,7 @@ import "../IERC20.sol";
  * previous utils implementations are for previous solidity versions.
  */
 contract Utils5 {
-    IERC20 internal constant ETH_TOKEN_ADDRESS = IERC20(
+    IERC20Ext internal constant ETH_TOKEN_ADDRESS = IERC20Ext(
         0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE
     );
     uint256 internal constant PRECISION = (10**18);
@@ -21,9 +21,9 @@ contract Utils5 {
     uint256 constant BPS = 10000; // Basic Price Steps. 1 step = 0.01%
     uint256 internal constant MAX_ALLOWANCE = uint256(-1); // token.approve inifinite
 
-    mapping(IERC20 => uint256) internal decimals;
+    mapping(IERC20Ext => uint256) internal decimals;
 
-    function getUpdateDecimals(IERC20 token) internal returns (uint256) {
+    function getUpdateDecimals(IERC20Ext token) internal returns (uint256) {
         if (token == ETH_TOKEN_ADDRESS) return ETH_DECIMALS; // save storage access
         uint256 tokenDecimals = decimals[token];
         // moreover, very possible that old tokens have decimals 0
@@ -36,7 +36,7 @@ contract Utils5 {
         return tokenDecimals;
     }
 
-    function setDecimals(IERC20 token) internal {
+    function setDecimals(IERC20Ext token) internal {
         if (decimals[token] != 0) return; //already set
 
         if (token == ETH_TOKEN_ADDRESS) {
@@ -49,7 +49,7 @@ contract Utils5 {
     /// @dev get the balance of a user.
     /// @param token The token type
     /// @return The balance
-    function getBalance(IERC20 token, address user) internal view returns (uint256) {
+    function getBalance(IERC20Ext token, address user) internal view returns (uint256) {
         if (token == ETH_TOKEN_ADDRESS) {
             return user.balance;
         } else {
@@ -57,7 +57,7 @@ contract Utils5 {
         }
     }
 
-    function getDecimals(IERC20 token) internal view returns (uint256) {
+    function getDecimals(IERC20Ext token) internal view returns (uint256) {
         if (token == ETH_TOKEN_ADDRESS) return ETH_DECIMALS; // save storage access
         uint256 tokenDecimals = decimals[token];
         // moreover, very possible that old tokens have decimals 0
@@ -68,8 +68,8 @@ contract Utils5 {
     }
 
     function calcDestAmount(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcAmount,
         uint256 rate
     ) internal view returns (uint256) {
@@ -77,8 +77,8 @@ contract Utils5 {
     }
 
     function calcSrcAmount(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 destAmount,
         uint256 rate
     ) internal view returns (uint256) {

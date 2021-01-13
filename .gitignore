@@ -12,9 +12,10 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
-.coverageArtifacts
 coverage
 coverage.json
+.coverageArtifacts
+.tempCoverageArtifacts
 
 # nyc test coverage
 .nyc_output
@@ -29,9 +30,6 @@ coverage.json
 build
 artifacts
 cache
-.coverage_artifacts/
-.coverage_contracts/
-.coverage_cache/
 
 # Dependency directories
 node_modules
@@ -48,6 +46,6 @@ jspm_packages
 
 report
 
-# Environment
 .env
-node_modules
+
+bin

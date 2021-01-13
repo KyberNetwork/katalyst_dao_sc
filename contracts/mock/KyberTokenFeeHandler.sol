@@ -1,16 +1,17 @@
 pragma solidity 0.6.6;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../utils/Utils5.sol";
-import "../utils/zeppelin/ReentrancyGuard.sol";
-import "../utils/zeppelin/SafeERC20.sol";
 import "../IKyberDao.sol";
 import "../IKyberFeeHandler.sol";
 import "../IKyberNetworkProxy.sol";
 import "../ISimpleKyberProxy.sol";
 import "../IBurnableToken.sol";
 import "../ISanityRate.sol";
-import "../utils/zeppelin/SafeMath.sol";
 import "../DaoOperator.sol";
+
 
 /**
  * @title IKyberProxy
@@ -21,7 +22,6 @@ import "../DaoOperator.sol";
 interface IKyberProxy is IKyberNetworkProxy, ISimpleKyberProxy {
     // empty block
 }
-
 
 /**
  * @title kyberTokenFeeHandler
@@ -48,7 +48,7 @@ interface IKyberProxy is IKyberNetworkProxy, ISimpleKyberProxy {
  */
 contract KyberTokenFeeHandler is IKyberFeeHandler, Utils5, DaoOperator, ReentrancyGuard {
     using SafeMath for uint256;
-    using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20Ext;
 
     uint256 internal constant DEFAULT_REWARD_BPS = 3000;
     uint256 internal constant DEFAULT_REBATE_BPS = 3000;
@@ -70,8 +70,8 @@ contract KyberTokenFeeHandler is IKyberFeeHandler, Utils5, DaoOperator, Reentran
     IKyberDao public immutable kyberDao;
     IKyberProxy public kyberProxy;
     address public kyberNetwork;
-    IERC20 public immutable quoteToken;
-    IERC20 public immutable knc;
+    IERC20Ext public immutable quoteToken;
+    IERC20Ext public immutable knc;
 
     uint256 public immutable burnBlockInterval;
     uint256 public lastBurnBlock;
@@ -94,7 +94,7 @@ contract KyberTokenFeeHandler is IKyberFeeHandler, Utils5, DaoOperator, Reentran
     ISanityRate[] internal sanityRateContract;
 
     event FeeDistributed(
-        IERC20 indexed token,
+        IERC20Ext indexed token,
         address indexed platformWallet,
         uint256 platformFeeTwei,
         uint256 rewardTwei,
@@ -123,16 +123,16 @@ contract KyberTokenFeeHandler is IKyberFeeHandler, Utils5, DaoOperator, Reentran
         IKyberDao _kyberDao,
         IKyberProxy _kyberProxy,
         address _kyberNetwork,
-        IERC20 _quoteToken,
-        IERC20 _knc,
+        IERC20Ext _quoteToken,
+        IERC20Ext _knc,
         uint256 _burnBlockInterval,
         address _daoOperator
     ) public DaoOperator(_daoOperator) {
         require(_kyberDao != IKyberDao(0), "kyberDao 0");
         require(_kyberProxy != IKyberProxy(0), "kyberNetworkProxy 0");
         require(_kyberNetwork != address(0), "kyberNetwork 0");
-        require(_quoteToken != IERC20(0), "quoteToken 0");
-        require(_knc != IERC20(0), "knc 0");
+        require(_quoteToken != IERC20Ext(0), "quoteToken 0");
+        require(_knc != IERC20Ext(0), "knc 0");
         require(_burnBlockInterval != 0, "_burnBlockInterval 0");
 
         kyberDao = _kyberDao;
@@ -173,7 +173,7 @@ contract KyberTokenFeeHandler is IKyberFeeHandler, Utils5, DaoOperator, Reentran
     /// @param platformFee Fee amount (in wei) the platfrom wallet is entitled to.
     /// @param networkFee Fee amount (in wei) to be allocated for BRR
     function handleFees(
-        IERC20 token,
+        IERC20Ext token,
         address[] calldata rebateWallets,
         uint256[] calldata rebateBpsPerWallet,
         address platformWallet,

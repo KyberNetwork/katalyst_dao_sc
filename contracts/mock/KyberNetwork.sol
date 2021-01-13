@@ -1,8 +1,8 @@
 pragma solidity 0.6.6;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../utils/Utils5.sol";
-import "../utils/zeppelin/ReentrancyGuard.sol";
-import "../utils/zeppelin/SafeERC20.sol";
 import "../IKyberFeeHandler.sol";
 import "../IKyberDao.sol";
 import "./WithdrawableNoModifiers.sol";
@@ -23,7 +23,7 @@ import "./IGasHelper.sol";
  *       kyberReserve(s): query rate and trade
  */
 contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, ReentrancyGuard {
-    using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20Ext;
 
     struct NetworkFeeData {
         uint64 expiryTimestamp;
@@ -76,9 +76,9 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
 
     struct TradeInput {
         address payable trader;
-        IERC20 src;
+        IERC20Ext src;
         uint256 srcAmount;
-        IERC20 dest;
+        IERC20Ext dest;
         address payable destAddress;
         uint256 maxDestAmount;
         uint256 minConversionRate;
@@ -113,7 +113,7 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     event KyberProxyRemoved(address kyberProxy);
 
     event ListedReservesForToken(
-        IERC20 indexed token,
+        IERC20Ext indexed token,
         address[] reserves,
         bool add
     );
@@ -145,9 +145,9 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @return destAmount Amount of actual dest tokens in twei
     function tradeWithHint(
         address payable trader,
-        ERC20 src,
+        IERC20Ext src,
         uint256 srcAmount,
-        ERC20 dest,
+        IERC20Ext dest,
         address payable destAddress,
         uint256 maxDestAmount,
         uint256 minConversionRate,
@@ -184,9 +184,9 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @return destAmount Amount of actual dest tokens in twei
     function tradeWithHintAndFee(
         address payable trader,
-        IERC20 src,
+        IERC20Ext src,
         uint256 srcAmount,
-        IERC20 dest,
+        IERC20Ext dest,
         address payable destAddress,
         uint256 maxDestAmount,
         uint256 minConversionRate,
@@ -216,7 +216,7 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @param add If true, then give reserve token allowance, otherwise set zero allowance
     function listTokenForReserve(
         address reserve,
-        IERC20 token,
+        IERC20Ext token,
         bool add
     ) external override {
         require(msg.sender == address(kyberStorage), "only kyberStorage");
@@ -238,7 +238,7 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @param endIndex end index in reserves list (can be larger)
     /// @param add If true, then give reserve token allowance, otherwise set zero allowance
     function listReservesForToken(
-        IERC20 token,
+        IERC20Ext token,
         uint256 startIndex,
         uint256 endIndex,
         bool add
@@ -362,8 +362,8 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @return rateWithNetworkFee Rate after deducting network fee but excluding platform fee
     /// @return rateWithAllFees = actual rate. Rate after accounting for both network and platform fees
     function getExpectedRateWithHintAndFee(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcQty,
         uint256 platformFeeBps,
         bytes calldata hint
@@ -412,8 +412,8 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @return expectedRate for a trade after deducting network fee. 
     /// @return worstRate for a trade. Calculated to be expectedRate * 97 / 100
     function getExpectedRate(
-        ERC20 src,
-        ERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcQty
     ) external view returns (uint256 expectedRate, uint256 worstRate) {
         if (src == dest) return (0, 0);
@@ -549,8 +549,8 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @param srcDecimals Decimals of source token
     /// @param destDecimals Decimals of destination token
     function doReserveTrades(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         address payable destAddress,
         ReservesData memory reservesData,
         uint256 expectedDestAmount,
@@ -589,8 +589,8 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @param destDecimals Decimals of destination token
     function tradeAndVerifyNetworkBalance(
         ReservesData memory reservesData,
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcDecimals,
         uint256 destDecimals
     ) internal
@@ -736,7 +736,7 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @notice If user maxDestAmount < actual dest amount, actualSrcAmount will be < srcAmount
     /// Calculate the change, and send it back to the user
     function handleChange(
-        IERC20 src,
+        IERC20Ext src,
         uint256 srcAmount,
         uint256 requiredSrcAmount,
         address payable trader
@@ -754,8 +754,8 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
 
     function initTradeInput(
         address payable trader,
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcAmount,
         address payable destAddress,
         uint256 maxDestAmount,
@@ -845,8 +845,8 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @notice Get trading reserves, source amounts, and calculate dest qty
     /// Store information into tradeData
     function calcDestQtyAndMatchReserves(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcAmount,
         TradeData memory tradeData,
         ReservesData memory reservesData,
@@ -909,8 +909,8 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @notice Calculates source amounts per reserve. Does get rate call
     function calcSrcAmountsAndGetRates(
         ReservesData memory reservesData,
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcAmount,
         TradeData memory tradeData
     ) internal view returns (uint256[] memory feesAccountedDestBps) {
@@ -1098,7 +1098,7 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
     /// @dev Total split bps must be 100%
     /// @dev Reserve ids must be increasing
     function validateTradeCalcDestQtyAndFeeData(
-        IERC20 src,
+        IERC20Ext src,
         ReservesData memory reservesData,
         TradeData memory tradeData
     ) internal pure returns (uint256 totalDestAmount) {

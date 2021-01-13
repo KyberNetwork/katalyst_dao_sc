@@ -6,7 +6,8 @@ while getopts "f:" arg; do
 done
 
 if [ -n "$FILE" ]; then
-  yarn buidler test $FILE
+  yarn hardhat test --no-compile $FILE
 else
-  yarn buidler test --config ./buidler.config.js
+  echo "Running all tests..."
+  yarn hardhat test --no-compile
 fi

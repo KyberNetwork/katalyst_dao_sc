@@ -8,7 +8,7 @@ import "../IKyberFeeHandler.sol";
 contract ReentrancyFeeClaimer is Utils5 {
     IKyberNetworkProxy kyberProxy;
     IKyberFeeHandler feeHandler;
-    IERC20 token;
+    IERC20Ext token;
     uint256 amount;
 
     bool isReentrancy = true;
@@ -16,7 +16,7 @@ contract ReentrancyFeeClaimer is Utils5 {
     constructor(
         IKyberNetworkProxy _kyberProxy,
         IKyberFeeHandler _feeHandler,
-        IERC20 _token,
+        IERC20Ext _token,
         uint256 _amount
     ) public {
         kyberProxy = _kyberProxy;

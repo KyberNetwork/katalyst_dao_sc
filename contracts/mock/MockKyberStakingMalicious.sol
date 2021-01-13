@@ -5,7 +5,7 @@ import "../KyberStaking.sol";
 
 contract MockKyberStakingMalicious is KyberStaking {
     constructor(
-        IERC20 _kncToken,
+        IERC20Ext _kncToken,
         uint256 _epochPeriod,
         uint256 _startBlock,
         IKyberDao _admin

@@ -29,13 +29,13 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
     mapping(bytes32 => address[]) internal reserveIdToAddresses;
     mapping(bytes32 => address) internal reserveRebateWallet;
     mapping(address => bytes32) internal reserveAddressToId;
-    mapping(IERC20 => bytes32[]) internal reservesPerTokenSrc; // reserves supporting token to eth
-    mapping(IERC20 => bytes32[]) internal reservesPerTokenDest; // reserves support eth to token
-    mapping(bytes32 => IERC20[]) internal srcTokensPerReserve;
-    mapping(bytes32 => IERC20[]) internal destTokensPerReserve;
+    mapping(IERC20Ext => bytes32[]) internal reservesPerTokenSrc; // reserves supporting token to eth
+    mapping(IERC20Ext => bytes32[]) internal reservesPerTokenDest; // reserves support eth to token
+    mapping(bytes32 => IERC20Ext[]) internal srcTokensPerReserve;
+    mapping(bytes32 => IERC20Ext[]) internal destTokensPerReserve;
 
-    mapping(IERC20 => mapping(bytes32 => bool)) internal isListedReserveWithTokenSrc;
-    mapping(IERC20 => mapping(bytes32 => bool)) internal isListedReserveWithTokenDest;
+    mapping(IERC20Ext => mapping(bytes32 => bool)) internal isListedReserveWithTokenSrc;
+    mapping(IERC20Ext => mapping(bytes32 => bool)) internal isListedReserveWithTokenDest;
 
     uint256 internal feeAccountedPerType = 0xffffffff;
     uint256 internal entitledRebatePerType = 0xffffffff;
@@ -80,8 +80,8 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
     event ListReservePairs(
         bytes32 indexed reserveId,
         address reserve,
-        IERC20 indexed src,
-        IERC20 indexed dest,
+        IERC20Ext indexed src,
+        IERC20Ext indexed dest,
         bool add
     );
 
@@ -221,7 +221,7 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
     /// @param add If true then list this pair, otherwise unlist it
     function listPairForReserve(
         bytes32 reserveId,
-        IERC20 token,
+        IERC20Ext token,
         bool ethToToken,
         bool tokenToEth,
         bool add
@@ -388,7 +388,7 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
         }
     }
 
-    function getReserveIdsPerTokenSrc(IERC20 token)
+    function getReserveIdsPerTokenSrc(IERC20Ext token)
         external
         view
         override
@@ -401,7 +401,7 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
     ///      in case we have a long list of reserves, approving all of them could run out of gas
     ///      using startIndex and endIndex to prevent above scenario
     ///      also enable us to approve reserve one by one
-    function getReserveAddressesPerTokenSrc(IERC20 token, uint256 startIndex, uint256 endIndex)
+    function getReserveAddressesPerTokenSrc(IERC20Ext token, uint256 startIndex, uint256 endIndex)
         external
         view
         override
@@ -421,7 +421,7 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
         }
     }
 
-    function getReserveIdsPerTokenDest(IERC20 token)
+    function getReserveIdsPerTokenDest(IERC20Ext token)
         external
         view
         override
@@ -528,8 +528,8 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
         external
         view
         returns (
-            IERC20[] memory srcTokens,
-            IERC20[] memory destTokens
+            IERC20Ext[] memory srcTokens,
+            IERC20Ext[] memory destTokens
         )
     {
         srcTokens = srcTokensPerReserve[reserveId];
@@ -569,7 +569,7 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
     /// @dev Returns information about reserves given their reserve IDs
     ///      Also check if these reserve IDs are listed for token
     ///      Network calls this function to retrive information about fee, address and rebate information
-    function getReservesData(bytes32[] calldata reserveIds, IERC20 src, IERC20 dest)
+    function getReservesData(bytes32[] calldata reserveIds, IERC20Ext src, IERC20Ext dest)
         external
         view
         override
@@ -607,7 +607,7 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
     function delistTokensOfReserve(bytes32 reserveId) internal {
         // token to ether
         // memory declaration instead of storage because we are modifying the storage array
-        IERC20[] memory tokensArr = srcTokensPerReserve[reserveId];
+        IERC20Ext[] memory tokensArr = srcTokensPerReserve[reserveId];
         for (uint256 i = 0; i < tokensArr.length; i++) {
             listPairForReserve(reserveId, tokensArr[i], false, true, false);
         }
@@ -621,13 +621,13 @@ contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
 
     function listPairs(
         bytes32 reserveId,
-        IERC20 token,
+        IERC20Ext token,
         bool isTokenToEth,
         bool add
     ) internal {
         uint256 i;
         bytes32[] storage reserveArr = reservesPerTokenDest[token];
-        IERC20[] storage tokensArr = destTokensPerReserve[reserveId];
+        IERC20Ext[] storage tokensArr = destTokensPerReserve[reserveId];
         mapping(bytes32 => bool) storage isListedReserveWithToken = isListedReserveWithTokenDest[token];
 
         if (isTokenToEth) {

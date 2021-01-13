@@ -1,4 +1,4 @@
-usePlugin("@nomiclabs/buidler-ethers");
+require("@nomiclabs/hardhat-ethers");
 
 let dao = "0x2Be7dC494362e4FCa2c228522047663B17aE17F9";
 let admin = "0xea058bEa72a251039C2c9C9C103fD2a9335a781F";
