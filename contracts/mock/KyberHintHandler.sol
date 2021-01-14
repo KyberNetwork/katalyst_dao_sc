@@ -1,6 +1,6 @@
 pragma solidity 0.6.6;
 
-import "../utils/Utils5.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "./IKyberHint.sol";
 
 
@@ -19,7 +19,7 @@ import "./IKyberHint.sol";
  *           - If an error is found, return no data such that the trade flow
  *             returns 0 rate for bad hint values
  */
-abstract contract KyberHintHandler is IKyberHint, Utils5 {
+abstract contract KyberHintHandler is IKyberHint, Utils {
     /// @notice Parses the hint for a token -> eth trade
     /// @param tokenSrc source token to trade
     /// @param hint The ABI encoded hint, built using the build*Hint functions

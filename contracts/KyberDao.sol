@@ -2,11 +2,11 @@ pragma solidity 0.6.6;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "./EpochUtils.sol";
 import "./DaoOperator.sol";
 import "./KyberStaking.sol";
 import "./IKyberDao.sol";
-import "./utils/Utils5.sol";
 
 /**
  * @notice  This contract is using SafeMath for uint, which is inherited from EpochUtils
@@ -15,7 +15,7 @@ import "./utils/Utils5.sol";
  *      BRR fee handler campaign: options are combined of rebate (left most 128 bits) + reward (right most 128 bits)
  *      General campaign: options are from 1 to num_options
  */
-contract KyberDao is IKyberDao, EpochUtils, ReentrancyGuard, Utils5, DaoOperator {
+contract KyberDao is IKyberDao, EpochUtils, ReentrancyGuard, Utils, DaoOperator {
     // max number of campaigns for each epoch
     uint256 public   constant MAX_EPOCH_CAMPAIGNS = 10;
     // max number of options for each campaign

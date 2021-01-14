@@ -3,7 +3,6 @@ pragma solidity 0.6.6;
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "../utils/Utils5.sol";
 import "../IKyberDao.sol";
 import "../IKyberFeeHandler.sol";
 import "../DaoOperator.sol";

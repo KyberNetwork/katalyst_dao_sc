@@ -1,11 +1,11 @@
 pragma solidity 0.6.6;
 
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "../utils/Utils5.sol";
 import "../IKyberNetworkProxy.sol";
 
 
-contract SimpleKyberProxy is IKyberNetworkProxy, Utils5 {
+contract SimpleKyberProxy is IKyberNetworkProxy, Utils {
     using SafeERC20 for IERC20Ext;
 
     mapping(bytes32 => uint256) public pairRate; //rate in precision units. i.e. if rate is 10**18 its same as 1:1

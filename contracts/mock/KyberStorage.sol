@@ -1,10 +1,10 @@
 pragma solidity 0.6.6;
 
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "./IKyberHistory.sol";
 import "./IKyberStorage.sol";
 import "./IKyberNetwork.sol";
 import "./PermissionGroupsNoModifiers.sol";
-import "../utils/Utils5.sol";
 
 
 /**
@@ -16,7 +16,7 @@ import "../utils/Utils5.sol";
  *   - Points to historical contracts that record contract changes for kyberNetwork,
  *        kyberFeeHandler, kyberDao and kyberMatchingEngine
  */
-contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils5 {
+contract KyberStorage is IKyberStorage, PermissionGroupsNoModifiers, Utils {
     // store current and previous contracts
     IKyberHistory public kyberNetworkHistory;
     IKyberHistory public kyberFeeHandlerHistory;

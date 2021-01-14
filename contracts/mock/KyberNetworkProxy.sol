@@ -1,7 +1,7 @@
 pragma solidity 0.6.6;
 
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "../utils/Utils5.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "../IKyberNetworkProxy.sol";
 import "../ISimpleKyberProxy.sol";
 import "./WithdrawableNoModifiers.sol";
@@ -21,7 +21,7 @@ contract KyberNetworkProxy is
     IKyberNetworkProxy,
     ISimpleKyberProxy,
     WithdrawableNoModifiers,
-    Utils5
+    Utils
 {
     using SafeERC20 for IERC20Ext;
 
@@ -422,8 +422,8 @@ contract KyberNetworkProxy is
         outcome.actualRate = calcRateFromQty(
             srcTokenAmountAfterDeductingFee,
             outcome.userDeltaDestToken,
-            getUpdateDecimals(src),
-            getUpdateDecimals(dest)
+            getSetDecimals(src),
+            getSetDecimals(dest)
         );
     }
 }

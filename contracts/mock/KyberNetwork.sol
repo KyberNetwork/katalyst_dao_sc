@@ -2,7 +2,7 @@ pragma solidity 0.6.6;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "../utils/Utils5.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "../IKyberFeeHandler.sol";
 import "../IKyberDao.sol";
 import "./WithdrawableNoModifiers.sol";
@@ -22,7 +22,7 @@ import "./IGasHelper.sol";
  *       kyberStorage: store / access reserves, token listings and contract addresses
  *       kyberReserve(s): query rate and trade
  */
-contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, ReentrancyGuard {
+contract KyberNetwork is WithdrawableNoModifiers, Utils, IKyberNetwork, ReentrancyGuard {
     using SafeERC20 for IERC20Ext;
 
     struct NetworkFeeData {
@@ -223,7 +223,7 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
 
         if (add) {
             token.safeApprove(reserve, MAX_ALLOWANCE);
-            setDecimals(token);
+            getSetDecimals(token);
         } else {
             token.safeApprove(reserve, 0);
         }
@@ -262,7 +262,7 @@ contract KyberNetwork is WithdrawableNoModifiers, Utils5, IKyberNetwork, Reentra
         for(uint i = 0; i < reserves.length; i++) {
             if (add) {
                 token.safeApprove(reserves[i], MAX_ALLOWANCE);
-                setDecimals(token);
+                getSetDecimals(token);
             } else {
                 token.safeApprove(reserves[i], 0);
             }

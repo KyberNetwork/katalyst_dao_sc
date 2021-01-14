@@ -11,7 +11,7 @@ let mainPath = 'artifacts/contracts';
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
 
-let argv = yargs.default('branch', 'Katalyst').alias('b', 'branch').argv;
+let argv = yargs.default('branch', 'master').alias('b', 'branch').argv;
 
 async function generateCodeSizeReport() {
   let result = {};

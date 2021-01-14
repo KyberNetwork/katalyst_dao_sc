@@ -3,7 +3,7 @@ pragma solidity 0.6.6;
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
-import "../utils/Utils5.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "../IKyberDao.sol";
 import "../IKyberFeeHandler.sol";
 import "../IKyberNetworkProxy.sol";
@@ -46,7 +46,7 @@ interface IKyberProxy is IKyberNetworkProxy, ISimpleKyberProxy {
  *      2. Network Fee distribution: Per epoch kyberFeeHandler contract reads BRR distribution percentage 
  *          from kyberDao. When the data expires, kyberFeeHandler reads updated values.
  */
-contract KyberTokenFeeHandler is IKyberFeeHandler, Utils5, DaoOperator, ReentrancyGuard {
+contract KyberTokenFeeHandler is IKyberFeeHandler, Utils, DaoOperator, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20Ext;
 
