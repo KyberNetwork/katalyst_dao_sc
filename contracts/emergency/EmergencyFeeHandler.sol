@@ -1,10 +1,10 @@
 pragma solidity 0.6.6;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@kyber.network/utils-sc/contracts/PermissionGroups.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "../IKyberFeeHandler.sol";
-import "../utils/PermissionGroups3.sol";
-import "../utils/zeppelin/ReentrancyGuard.sol";
-import "../utils/zeppelin/SafeMath.sol";
-import "../utils/Utils5.sol";
 
 /**
  * @title kyberFeeHandler
@@ -13,7 +13,7 @@ import "../utils/Utils5.sol";
  *      rebateBps and rewardBps is only set when initialization
  *      user can claim platformfee, rebate and reward will be distributed by admin
  */
-contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, ReentrancyGuard, Utils5 {
+contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups, ReentrancyGuard, Utils {
     using SafeMath for uint256;
 
     uint16 public immutable rewardBps;
@@ -35,7 +35,7 @@ contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, Reentr
     event HandleFeeFailed(address[] rebateWallets, uint256[] rebateBpsPerWallet, uint256 feeBRRWei);
 
     event HandleFee(
-        IERC20 indexed token,
+        IERC20Ext indexed token,
         address indexed platformWallet,
         uint256 platformFeeWei,
         address[] rebateWallets,
@@ -44,7 +44,7 @@ contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, Reentr
     );
 
     event FeeDistribution(
-        IERC20 indexed token,
+        IERC20Ext indexed token,
         address indexed platformWallet,
         uint256 platformFeeWei,
         uint256 rewardWei,
@@ -64,7 +64,7 @@ contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, Reentr
         uint256 _rewardBps,
         uint256 _rebateBps,
         uint256 _burnBps
-    ) public PermissionGroups3(admin) {
+    ) public PermissionGroups(admin) {
         require(_burnBps.add(_rewardBps).add(_rebateBps) == BPS, "Bad BRR values");
         rewardBps = uint16(_rewardBps);
         rebateBps = uint16(_rebateBps);
@@ -84,7 +84,7 @@ contract EmergencyKyberFeeHandler is IKyberFeeHandler, PermissionGroups3, Reentr
     /// @param platformFee Fee amount in wei the platfrom wallet is entitled to.
     /// @param networkFee Fee amount (in wei) to be allocated for BRR
     function handleFees(
-        IERC20 token,
+        IERC20Ext token,
         address[] calldata rebateWallets,
         uint256[] calldata rebateBpsPerWallet,
         address platformWallet,

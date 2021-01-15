@@ -1,14 +1,14 @@
 pragma solidity 0.6.6;
 
-import "./IERC20.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
 
 
 interface IKyberNetworkProxy {
 
     event ExecuteTrade(
         address indexed trader,
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         address destAddress,
         uint256 actualSrcAmount,
         uint256 actualDestAmount,
@@ -18,9 +18,9 @@ interface IKyberNetworkProxy {
 
     /// @notice backward compatible
     function tradeWithHint(
-        ERC20 src,
+        IERC20Ext src,
         uint256 srcAmount,
-        ERC20 dest,
+        IERC20Ext dest,
         address payable destAddress,
         uint256 maxDestAmount,
         uint256 minConversionRate,
@@ -29,9 +29,9 @@ interface IKyberNetworkProxy {
     ) external payable returns (uint256);
 
     function tradeWithHintAndFee(
-        IERC20 src,
+        IERC20Ext src,
         uint256 srcAmount,
-        IERC20 dest,
+        IERC20Ext dest,
         address payable destAddress,
         uint256 maxDestAmount,
         uint256 minConversionRate,
@@ -41,9 +41,9 @@ interface IKyberNetworkProxy {
     ) external payable returns (uint256 destAmount);
 
     function trade(
-        IERC20 src,
+        IERC20Ext src,
         uint256 srcAmount,
-        IERC20 dest,
+        IERC20Ext dest,
         address payable destAddress,
         uint256 maxDestAmount,
         uint256 minConversionRate,
@@ -53,14 +53,14 @@ interface IKyberNetworkProxy {
     /// @notice backward compatible
     /// @notice Rate units (10 ** 18) => destQty (twei) / srcQty (twei) * 10 ** 18
     function getExpectedRate(
-        ERC20 src,
-        ERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcQty
     ) external view returns (uint256 expectedRate, uint256 worstRate);
 
     function getExpectedRateAfterFee(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcQty,
         uint256 platformFeeBps,
         bytes calldata hint

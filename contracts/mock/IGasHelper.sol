@@ -1,13 +1,13 @@
 pragma solidity 0.6.6;
 
-import "../IERC20.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
 
 
 interface IGasHelper {
     function freeGas(
         address platformWallet,
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 tradeWei,
         bytes32[] calldata t2eReserveIds,
         bytes32[] calldata e2tReserveIds

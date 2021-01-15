@@ -1,9 +1,8 @@
 pragma solidity 0.6.6;
 
-import "../utils/Utils5.sol";
-import "../utils/zeppelin/ReentrancyGuard.sol";
-import "../utils/zeppelin/SafeERC20.sol";
-import "../utils/zeppelin/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "../IKyberDao.sol";
 import "../IKyberFeeHandler.sol";
 import "../DaoOperator.sol";
@@ -16,7 +15,7 @@ interface IFeeHandler is IKyberFeeHandler {
 
 contract KyberFeeHandlerWrapper is DaoOperator {
     using SafeMath for uint256;
-    using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20Ext;
 
     struct KyberFeeHandlerData {
         IFeeHandler kyberFeeHandler;
@@ -24,11 +23,11 @@ contract KyberFeeHandlerWrapper is DaoOperator {
     }
 
     IKyberDao public immutable kyberDao;
-    IERC20[] internal supportedTokens;
-    mapping(IERC20 => KyberFeeHandlerData[]) internal kyberFeeHandlersPerToken;
+    IERC20Ext[] internal supportedTokens;
+    mapping(IERC20Ext => KyberFeeHandlerData[]) internal kyberFeeHandlersPerToken;
     address public daoSetter;
 
-    event FeeHandlerAdded(IERC20 token, IFeeHandler kyberFeeHandler);
+    event FeeHandlerAdded(IERC20Ext token, IFeeHandler kyberFeeHandler);
 
     constructor(
         IKyberDao _kyberDao,
@@ -38,7 +37,7 @@ contract KyberFeeHandlerWrapper is DaoOperator {
         kyberDao = _kyberDao;
     }
 
-    function addFeeHandler(IERC20 _token, IFeeHandler _kyberFeeHandler) external onlyDaoOperator {
+    function addFeeHandler(IERC20Ext _token, IFeeHandler _kyberFeeHandler) external onlyDaoOperator {
         addTokenToSupportedTokensArray(_token);
         addFeeHandlerToKyberFeeHandlerArray(kyberFeeHandlersPerToken[_token], _kyberFeeHandler);
         emit FeeHandlerAdded(_token, _kyberFeeHandler);
@@ -182,7 +181,7 @@ contract KyberFeeHandlerWrapper is DaoOperator {
         }
     }
 
-    function getKyberFeeHandlersPerToken(IERC20 token) external view returns (
+    function getKyberFeeHandlersPerToken(IERC20Ext token) external view returns (
         IFeeHandler[] memory kyberFeeHandlers,
         uint256[] memory epochs
         )
@@ -196,11 +195,11 @@ contract KyberFeeHandlerWrapper is DaoOperator {
         }
     }
     
-    function getSupportedTokens() external view returns (IERC20[] memory) {
+    function getSupportedTokens() external view returns (IERC20Ext[] memory) {
         return supportedTokens;
     }
 
-    function addTokenToSupportedTokensArray(IERC20 _token) internal {
+    function addTokenToSupportedTokensArray(IERC20Ext _token) internal {
         uint256 i;
         for (i = 0; i < supportedTokens.length; i++) {
             if (_token == supportedTokens[i]) {

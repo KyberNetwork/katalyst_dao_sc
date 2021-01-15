@@ -1,7 +1,8 @@
 pragma solidity 0.6.6;
 
-import "./IERC20.sol";
-import "./utils/zeppelin/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/math/Math.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
 import "./IKyberStaking.sol";
 import "./IKyberDao.sol";
 import "./EpochUtils.sol";
@@ -13,13 +14,15 @@ import "./EpochUtils.sol";
  *           Staking contract will be deployed by KyberDao's contract
  */
 contract KyberStaking is IKyberStaking, EpochUtils, ReentrancyGuard {
+    using Math for uint256;
+
     struct StakerData {
         uint256 stake;
         uint256 delegatedStake;
         address representative;
     }
 
-    IERC20 public immutable kncToken;
+    IERC20Ext public immutable kncToken;
     IKyberDao public immutable kyberDao;
 
     // staker data per epoch, including stake, delegated stake and representative
@@ -34,14 +37,14 @@ contract KyberStaking is IKyberStaking, EpochUtils, ReentrancyGuard {
     event WithdrawDataUpdateFailed(uint256 curEpoch, address staker, uint256 amount);
 
     constructor(
-        IERC20 _kncToken,
+        IERC20Ext _kncToken,
         uint256 _epochPeriod,
         uint256 _startTimestamp,
         IKyberDao _kyberDao
     ) public {
         require(_epochPeriod > 0, "ctor: epoch period is 0");
         require(_startTimestamp >= now, "ctor: start in the past");
-        require(_kncToken != IERC20(0), "ctor: kncToken 0");
+        require(_kncToken != IERC20Ext(0), "ctor: kncToken 0");
         require(_kyberDao != IKyberDao(0), "ctor: kyberDao 0");
 
         epochPeriodInSeconds = _epochPeriod;

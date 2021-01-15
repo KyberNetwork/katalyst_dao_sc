@@ -1,7 +1,3 @@
-## utils
-contracts/utils/zeppelin/*.sol
-contracts/utils/Utils5.sol
-
 ## mock contracts
 contracts/mock/MaliciousFeeHandler.sol
 contracts/mock/MaliciousKyberDao.sol

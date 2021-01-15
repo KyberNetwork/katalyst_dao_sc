@@ -1,21 +1,21 @@
 pragma solidity 0.6.6;
 
-import "../IERC20.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
 
 
 interface IKyberReserve {
     function trade(
-        IERC20 srcToken,
+        IERC20Ext srcToken,
         uint256 srcAmount,
-        IERC20 destToken,
+        IERC20Ext destToken,
         address payable destAddress,
         uint256 conversionRate,
         bool validate
     ) external payable returns (bool);
 
     function getConversionRate(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcQty,
         uint256 blockNumber
     ) external view returns (uint256);

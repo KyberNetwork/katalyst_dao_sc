@@ -63,8 +63,8 @@ contract KyberMatchingEngine is KyberHintHandler, IKyberMatchingEngine, Withdraw
     /// @return splitValuesBps Array of split values (in basis points) for the trade
     /// @return processWithRate Enum ProcessWithRate, whether extra processing is required or not
     function getTradingReserves(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         bool isTokenToToken,
         bytes calldata hint
     )
@@ -141,8 +141,8 @@ contract KyberMatchingEngine is KyberHintHandler, IKyberMatchingEngine, Withdraw
     /// @param rates Rates queried from reserves
     /// @return reserveIndexes An array of the indexes most suited for the trade
     function doMatch(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256[] calldata srcAmounts,
         uint256[] calldata feesAccountedDestBps, // 0 for no fee, networkFeeBps when has fee
         uint256[] calldata rates
@@ -212,8 +212,8 @@ contract KyberMatchingEngine is KyberHintHandler, IKyberMatchingEngine, Withdraw
 
     function areAllReservesListed(
         bytes32[] memory reserveIds,
-        IERC20 src,
-        IERC20 dest
+        IERC20Ext src,
+        IERC20Ext dest
     ) internal override view returns (bool allReservesListed) {
         (allReservesListed, , ,) = kyberStorage.getReservesData(reserveIds, src, dest);
     }

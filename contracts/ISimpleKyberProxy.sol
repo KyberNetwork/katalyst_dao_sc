@@ -1,6 +1,6 @@
 pragma solidity 0.6.6;
 
-import "./IERC20.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
 
 
 /*
@@ -9,20 +9,20 @@ import "./IERC20.sol";
  */
 interface ISimpleKyberProxy {
     function swapTokenToEther(
-        IERC20 token,
+        IERC20Ext token,
         uint256 srcAmount,
         uint256 minConversionRate
     ) external returns (uint256 destAmount);
 
-    function swapEtherToToken(IERC20 token, uint256 minConversionRate)
+    function swapEtherToToken(IERC20Ext token, uint256 minConversionRate)
         external
         payable
         returns (uint256 destAmount);
 
     function swapTokenToToken(
-        IERC20 src,
+        IERC20Ext src,
         uint256 srcAmount,
-        IERC20 dest,
+        IERC20Ext dest,
         uint256 minConversionRate
     ) external returns (uint256 destAmount);
 }

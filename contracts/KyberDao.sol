@@ -1,12 +1,12 @@
 pragma solidity 0.6.6;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@kyber.network/utils-sc/contracts/IERC20Ext.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "./EpochUtils.sol";
 import "./DaoOperator.sol";
 import "./KyberStaking.sol";
-import "./IERC20.sol";
 import "./IKyberDao.sol";
-import "./utils/zeppelin/ReentrancyGuard.sol";
-import "./utils/Utils5.sol";
 
 /**
  * @notice  This contract is using SafeMath for uint, which is inherited from EpochUtils
@@ -15,7 +15,7 @@ import "./utils/Utils5.sol";
  *      BRR fee handler campaign: options are combined of rebate (left most 128 bits) + reward (right most 128 bits)
  *      General campaign: options are from 1 to num_options
  */
-contract KyberDao is IKyberDao, EpochUtils, ReentrancyGuard, Utils5, DaoOperator {
+contract KyberDao is IKyberDao, EpochUtils, ReentrancyGuard, Utils, DaoOperator {
     // max number of campaigns for each epoch
     uint256 public   constant MAX_EPOCH_CAMPAIGNS = 10;
     // max number of options for each campaign
@@ -53,7 +53,7 @@ contract KyberDao is IKyberDao, EpochUtils, ReentrancyGuard, Utils5, DaoOperator
     }
 
     uint256 public minCampaignDurationInSeconds = 4 days;
-    IERC20 public immutable kncToken;
+    IERC20Ext public immutable kncToken;
     IKyberStaking public immutable staking;
 
     // use to generate increasing campaign ID
@@ -94,7 +94,7 @@ contract KyberDao is IKyberDao, EpochUtils, ReentrancyGuard, Utils5, DaoOperator
     constructor(
         uint256 _epochPeriod,
         uint256 _startTimestamp,
-        IERC20 _knc,
+        IERC20Ext _knc,
         uint256 _defaultNetworkFeeBps,
         uint256 _defaultRewardBps,
         uint256 _defaultRebateBps,
@@ -102,7 +102,7 @@ contract KyberDao is IKyberDao, EpochUtils, ReentrancyGuard, Utils5, DaoOperator
     ) public DaoOperator(_daoOperator) {
         require(_epochPeriod > 0, "ctor: epoch period is 0");
         require(_startTimestamp >= now, "ctor: start in the past");
-        require(_knc != IERC20(0), "ctor: knc token 0");
+        require(_knc != IERC20Ext(0), "ctor: knc token 0");
         // in Network, maximum fee that can be taken from 1 tx is (platform fee + 2 * network fee)
         // so network fee should be less than 50%
         require(_defaultNetworkFeeBps < BPS / 2, "ctor: network fee high");

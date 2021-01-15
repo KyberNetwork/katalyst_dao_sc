@@ -19,31 +19,31 @@ interface IKyberHint {
     }
 
     function buildTokenToEthHint(
-        IERC20 tokenSrc,
+        IERC20Ext tokenSrc,
         TradeType tokenToEthType,
         bytes32[] calldata tokenToEthReserveIds,
         uint256[] calldata tokenToEthSplits
     ) external view returns (bytes memory hint);
 
     function buildEthToTokenHint(
-        IERC20 tokenDest,
+        IERC20Ext tokenDest,
         TradeType ethToTokenType,
         bytes32[] calldata ethToTokenReserveIds,
         uint256[] calldata ethToTokenSplits
     ) external view returns (bytes memory hint);
 
     function buildTokenToTokenHint(
-        IERC20 tokenSrc,
+        IERC20Ext tokenSrc,
         TradeType tokenToEthType,
         bytes32[] calldata tokenToEthReserveIds,
         uint256[] calldata tokenToEthSplits,
-        IERC20 tokenDest,
+        IERC20Ext tokenDest,
         TradeType ethToTokenType,
         bytes32[] calldata ethToTokenReserveIds,
         uint256[] calldata ethToTokenSplits
     ) external view returns (bytes memory hint);
 
-    function parseTokenToEthHint(IERC20 tokenSrc, bytes calldata hint)
+    function parseTokenToEthHint(IERC20Ext tokenSrc, bytes calldata hint)
         external
         view
         returns (
@@ -53,7 +53,7 @@ interface IKyberHint {
             uint256[] memory tokenToEthSplits
         );
 
-    function parseEthToTokenHint(IERC20 tokenDest, bytes calldata hint)
+    function parseEthToTokenHint(IERC20Ext tokenDest, bytes calldata hint)
         external
         view
         returns (
@@ -63,7 +63,7 @@ interface IKyberHint {
             uint256[] memory ethToTokenSplits
         );
 
-    function parseTokenToTokenHint(IERC20 tokenSrc, IERC20 tokenDest, bytes calldata hint)
+    function parseTokenToTokenHint(IERC20Ext tokenSrc, IERC20Ext tokenDest, bytes calldata hint)
         external
         view
         returns (

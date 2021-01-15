@@ -28,17 +28,17 @@ interface IKyberStorage {
         view
         returns (address[] memory reserveAddresses);
 
-    function getReserveIdsPerTokenSrc(IERC20 token)
+    function getReserveIdsPerTokenSrc(IERC20Ext token)
         external
         view
         returns (bytes32[] memory reserveIds);
 
-    function getReserveAddressesPerTokenSrc(IERC20 token, uint256 startIndex, uint256 endIndex)
+    function getReserveAddressesPerTokenSrc(IERC20Ext token, uint256 startIndex, uint256 endIndex)
         external
         view
         returns (address[] memory reserveAddresses);
 
-    function getReserveIdsPerTokenDest(IERC20 token)
+    function getReserveIdsPerTokenDest(IERC20Ext token)
         external
         view
         returns (bytes32[] memory reserveIds);
@@ -87,7 +87,7 @@ interface IKyberStorage {
         view
         returns (bool[] memory entitledRebateArr);
 
-    function getReservesData(bytes32[] calldata reserveIds, IERC20 src, IERC20 dest)
+    function getReservesData(bytes32[] calldata reserveIds, IERC20Ext src, IERC20Ext dest)
         external
         view
         returns (

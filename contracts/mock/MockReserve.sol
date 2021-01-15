@@ -1,13 +1,13 @@
 pragma solidity 0.6.6;
 
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@kyber.network/utils-sc/contracts/Utils.sol";
 import "./IKyberReserve.sol";
 import "./IKyberSanity.sol";
-import "../utils/Utils5.sol";
-import "../utils/zeppelin/SafeERC20.sol";
 
 
-contract MockReserve is IKyberReserve, Utils5 {
-    using SafeERC20 for IERC20;
+contract MockReserve is IKyberReserve, Utils {
+    using SafeERC20 for IERC20Ext;
 
     IKyberSanity public sanityRatesContract;
     mapping(address => uint256) public buyTokenRates;
@@ -22,7 +22,7 @@ contract MockReserve is IKyberReserve, Utils5 {
     }
 
     function setRate(
-        IERC20 token,
+        IERC20Ext token,
         uint256 buyRate,
         uint256 sellRate
     ) public {
@@ -34,14 +34,14 @@ contract MockReserve is IKyberReserve, Utils5 {
         msg.sender.transfer(address(this).balance);
     }
 
-    function withdrawAllToken(IERC20 token) public {
+    function withdrawAllToken(IERC20Ext token) public {
         token.transfer(msg.sender, token.balanceOf(address(this)));
     }
 
     function trade(
-        IERC20 srcToken,
+        IERC20Ext srcToken,
         uint256 srcAmount,
-        IERC20 destToken,
+        IERC20Ext destToken,
         address payable destAddress,
         uint256 conversionRate,
         bool validate
@@ -72,13 +72,13 @@ contract MockReserve is IKyberReserve, Utils5 {
         return true;
     }
 
-    function getTokenDecimals(IERC20 token) public view returns (uint256) {
+    function getTokenDecimals(IERC20Ext token) public view returns (uint256) {
         return getDecimals(token);
     }
 
     function getConversionRate(
-        IERC20 src,
-        IERC20 dest,
+        IERC20Ext src,
+        IERC20Ext dest,
         uint256 srcQty,
         uint256 blockNumber
     ) public view override returns (uint256) {
