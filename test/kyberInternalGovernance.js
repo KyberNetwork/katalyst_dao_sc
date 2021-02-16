@@ -107,13 +107,16 @@ contract('KyberInternalGovernance', function (accounts) {
     it('test claim reward', async () => {
       await sendFeesToFeeHandler(mockKyberDao, feeHandler, 10);
 
-      let epochs = [1,2,3,4,5];
+      let epochs = [1, 2, 3, 4, 5];
       let balanceBefore = await Helper.getBalancePromise(recipient);
       await kyberInternalGovernance.claimRewards(epochs);
       let balanceAfter = await Helper.getBalancePromise(recipient);
       let expectReward = new BN(0);
-      for(let i = 0; i < epochs.length; i++) {
-        let rPercentage = await mockKyberDao.getPastEpochRewardPercentageInPrecision(kyberInternalGovernance.address, epochs[i]);
+      for (let i = 0; i < epochs.length; i++) {
+        let rPercentage = await mockKyberDao.getPastEpochRewardPercentageInPrecision(
+          kyberInternalGovernance.address,
+          epochs[i]
+        );
         let reward = await feeHandler.rewardsPerEpoch(epochs[i]);
         expectReward = expectReward.add(rPercentage.mul(reward).div(precisionUnits));
       }
@@ -125,8 +128,8 @@ contract('KyberInternalGovernance', function (accounts) {
     });
   });
 
-  describe(`test withdraw fund`, async() => {
-    before(`init data`, async() => {
+  describe(`test withdraw fund`, async () => {
+    before(`init data`, async () => {
       // setup kyberInternalGovernance
       kyberInternalGovernance = await KyberInternalGovernance.new(
         admin,
@@ -137,12 +140,12 @@ contract('KyberInternalGovernance', function (accounts) {
       );
     });
 
-    it(`test withdraw funds`, async() => {
+    it(`test withdraw funds`, async () => {
       let tokenAmount = new BN(1000);
       await knc.transfer(kyberInternalGovernance.address, tokenAmount);
       let balanceBefore = await knc.balanceOf(recipient);
       let withdrawAmount = tokenAmount.div(new BN(3));
-      await kyberInternalGovernance.withdrawFund([knc.address], [withdrawAmount], { from: admin });
+      await kyberInternalGovernance.withdrawFund([knc.address], [withdrawAmount], {from: admin});
       let balanceAfter = await knc.balanceOf(recipient);
       Helper.assertEqual(balanceAfter.sub(balanceBefore), withdrawAmount);
 
@@ -150,7 +153,7 @@ contract('KyberInternalGovernance', function (accounts) {
       await Helper.sendEtherWithPromise(accounts[0], kyberInternalGovernance.address, ethAmount);
       balanceBefore = await Helper.getBalancePromise(recipient);
       withdrawAmount = ethAmount.div(new BN(3));
-      await kyberInternalGovernance.withdrawFund([ethAddress], [withdrawAmount], { from: admin });
+      await kyberInternalGovernance.withdrawFund([ethAddress], [withdrawAmount], {from: admin});
       balanceAfter = await Helper.getBalancePromise(recipient);
       Helper.assertEqual(balanceAfter.sub(balanceBefore), withdrawAmount);
     });
