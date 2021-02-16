@@ -28,7 +28,8 @@ contract KyberInternalGovernance is ReentrancyGuard, PermissionGroups, Utils {
         address _admin,
         address payable _rewardRecipient,
         IKyberDao _dao,
-        IFeeHandler _feeHandler
+        IFeeHandler _feeHandler,
+        address _operator
     ) public PermissionGroups(_admin) {
         require(_rewardRecipient != address(0), "invalid reward recipient");
         require(_dao != IKyberDao(0), "invalid kyber dao");
@@ -36,6 +37,13 @@ contract KyberInternalGovernance is ReentrancyGuard, PermissionGroups, Utils {
         rewardRecipient = _rewardRecipient;
         kyberDao = _dao;
         kyberFeeHandler = _feeHandler;
+
+        if (_operator != address(0)) {
+            // consistent with current design
+            operators[_operator] = true;
+            operatorsGroup.push(_operator);
+            emit OperatorAdded(_operator, true);
+        }
     }
 
     receive() external payable {}

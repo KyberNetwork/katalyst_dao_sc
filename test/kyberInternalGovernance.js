@@ -99,7 +99,8 @@ contract('KyberInternalGovernance', function (accounts) {
         admin,
         recipient,
         mockKyberDao.address,
-        feeHandler.address
+        feeHandler.address,
+        operator
       );
     });
 
@@ -131,7 +132,8 @@ contract('KyberInternalGovernance', function (accounts) {
         admin,
         recipient,
         accounts[0],
-        accounts[1]
+        accounts[1],
+        accounts[2]
       );
     });
 
