@@ -112,7 +112,7 @@ contract KyberInternalGovernance is ReentrancyGuard, PermissionGroups, Utils {
     function withdrawFund(
         IERC20Ext[] calldata tokens,
         uint256[] calldata amounts
-    ) external onlyAdmin {
+    ) external {
         require(tokens.length == amounts.length, "invalid length");
         for(uint256 i = 0; i < tokens.length; i++) {
             if (tokens[i] == ETH_TOKEN_ADDRESS) {
