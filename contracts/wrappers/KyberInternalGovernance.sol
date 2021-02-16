@@ -22,7 +22,6 @@ contract KyberInternalGovernance is ReentrancyGuard, PermissionGroups, Utils {
     IKyberDao public kyberDao;
     IFeeHandler public kyberFeeHandler;
 
-    event Voted(uint256[] campaignIds, uint256[] options);
     event ClaimedRewards(uint256[] indexed epochs, uint256 totalReward, uint256 totalSentEth);
 
     constructor(
@@ -55,7 +54,6 @@ contract KyberInternalGovernance is ReentrancyGuard, PermissionGroups, Utils {
         for(uint256 i = 0; i < campaignIds.length; i++) {
             kyberDao.vote(campaignIds[i], options[i]);
         }
-        emit Voted(campaignIds, options);
     }
 
     /**
