@@ -18,7 +18,7 @@ interface IFeeHandler is IKyberFeeHandler {
 contract KyberInternalGovernance is ReentrancyGuard, PermissionGroups, Utils {
     using SafeERC20 for IERC20Ext;
 
-    address payable rewardRecipient;
+    address payable public rewardRecipient;
     IKyberDao public kyberDao;
     IFeeHandler public kyberFeeHandler;
 
