@@ -125,4 +125,14 @@ contract KyberInternalGovernance is ReentrancyGuard, PermissionGroups, Utils {
             }
         }
     }
+
+    function updateOperators(address[] calldata operators, bool isAdd) external onlyAdmin {
+        for(uint256 i = 0; i < operators.length; i++) {
+            if (isAdd) {
+                addOperator(operators[i]);
+            } else {
+                removeOperator(operators[i]);
+            }
+        }
+    }
 }
